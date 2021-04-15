@@ -212,6 +212,7 @@ ScrollView has a problem when managing big data (1000, 2000 items...). To fix th
 ````
 
 
+
 ## 5. SectionList
 
 On our contacts on the mobile for example, the data is not usually displayed as a unordered list. Usually it's separated in sections like 'contacts with A', 'contacts with B', etc...
@@ -314,6 +315,8 @@ export default function App() {
 ````
 
 
+
+
 ## 6. Load content from an API and display it in a FlatList
 
 A little component to fetch data from a API and process it into our app
@@ -376,6 +379,9 @@ export default function App() {
 }
 ````
 
+
+
+
 ## 7. ActivityIndicator
 
 A spinner to show the user that the app is loading. Recives 2 props: `size` (small or large) and `color`.
@@ -388,4 +394,149 @@ return (
 		<ActivityIndicator size='large' color='#ccc' />
 	</View>
 )
+````
+
+
+
+
+## 8. Image
+
+To insert images on the app, you can do it from a relative route with `require()` or from Internet with an object `{uri: ''}`
+
+````jsx
+return (
+	<View style={styles.container}>
+		<Image
+			style={styles.photo1}
+			source={require('./assets/favicon.png')}
+		/>
+		<Image
+			style={styles.photo2}
+			source={{uri: 'https://placekitten.com/200/200'}}
+		/>
+	</View>
+)
+````
+
+
+
+## 9. ImageBackground
+
+To set a background image, passing the content over it as children
+
+````jsx
+return (
+	<View style={styles.container}>
+		<ImageBackground
+			style={styles.photo}
+			source={{uri: 'https://placekitten.com/200/200'}}
+		>
+			<Text>Text inside an image</Text>
+		</ImageBackground>
+	</View>
+)
+````
+
+
+
+
+## 10. Modal
+
+To display info or options in front of the user without lose the context of the app
+
+
+````jsx
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#eee',
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: 50,
+	},
+	content: {
+		flex: 1,
+		alignItems: 'stretch',
+		justifyContent: 'center',
+		backgroundColor: 'rgba(0,0,0,0.5)',
+	},
+	center: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: '#edffa9',
+		margin: 50,
+		borderRadius: 10,
+	},
+})
+
+export default function App() {
+
+	const [modal, setModal] = useState(false)
+
+	return (
+		<View style={styles.container}>
+			<Modal
+				animationType='slide'
+				transparent={true}
+				visible={modal}
+				onRequestClose={() => {/* this code is executed on close */}}
+			>
+				<View style={styles.content}>
+					<View style={styles.center}>
+						<Text>Content of the modal</Text>
+						<Button title='Close modal' onPress={() => setModal(!modal)} />
+					</View>
+				</View>
+			</Modal>
+			<Button title='Open modal' onPress={() => setModal(!modal)} />
+		</View>
+	)
+}
+````
+
+
+
+
+## 11. Alert
+
+Blocks all the interactions, forcing the user to pay attention to the alert
+
+Recieves 4 parameters:
+
+* Title
+* Body
+* Options (footer buttons)
+* Is cancelable?
+
+
+````jsx
+const createDialog = () => Alert.alert(
+	'Title dialog',
+	'body text of the dialog as second parameter',
+	[
+		{
+			text: 'Cancel',
+			onPress: () => {},
+			style: 'cancel',
+		},
+		{
+			text: 'Accept',
+			onPress: () => console.log('button pressed'),
+			style: 'accept',
+		},
+	],
+	{ cancelable: false },
+)
+
+export default function App() {
+
+	const [modal, setModal] = useState(false)
+
+	return (
+		<View style={styles.container}>
+			<Button title='Open alert' onPress={createDialog} />
+		</View>
+	)
+}
 ````

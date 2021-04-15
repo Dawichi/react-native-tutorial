@@ -540,3 +540,13 @@ export default function App() {
 	)
 }
 ````
+
+
+
+## 12. Location
+
+Is an Expo package to read geolocation from the device
+
+```bash
+$ expo install expo-location
+```

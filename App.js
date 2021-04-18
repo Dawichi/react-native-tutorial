@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Alert, Button } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
+import MapView, { Marker } from 'react-native-maps'
+import * as Location from 'expo-location'
 
 const { width, height } = Dimensions.get('window')
 
@@ -11,33 +13,41 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		padding: 50,
 	},
+	map: {
+		width: width,
+		height: height,
+	},	
 })
-
-const createDialog = () => Alert.alert(
-	'Title dialog',
-	'body text of the dialog as second parameter',
-	[
-		{
-			text: 'Cancel',
-			onPress: () => {},
-			style: 'cancel',
-		},
-		{
-			text: 'Accept',
-			onPress: () => console.log('button pressed'),
-			style: 'accept',
-		},
-	],
-	{ cancelable: false },
-)
 
 export default function App() {
 
-	const [modal, setModal] = useState(false)
+	const [location, setLocation] = useState({})
+
+	const searchLocation = async () => {
+		const { status } = await Location.requestPermissionsAsync()
+		if (status !== 'granted') {
+			return Alert.alert('You do not have the required permissions')
+		}
+		const location = await Location.getCurrentPositionAsync({})
+		setLocation(location)
+	}
+
+	useEffect(() => {
+		searchLocation()
+	})
 
 	return (
 		<View style={styles.container}>
-			<Button title='Open alert' onPress={createDialog} />
+			<MapView style={styles.map}>
+				{ location.coords
+					? <Marker
+						coordinate={location.coords}
+						title="Marker title"
+						description="Marker description"
+					/>
+					: null
+				}
+			</MapView>
 		</View>
 	)
 }
